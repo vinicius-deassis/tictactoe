@@ -15,12 +15,13 @@ def showboard():
 
 def translateCoord(coordinate):
     if coordinate[0] == "a":
-        return coordinate.replace("a", "0")
+        return ("0",coordinate[1])
     elif coordinate[0] == "b":
-        return coordinate.replace("b", "1")
+        return ("1",coordinate[1])
     elif coordinate[0] == "c":
-        return coordinate.replace("c", "2")
+        return ("2",coordinate[1])
     else:
+        print(coordinate)
         return 'wrong coordinate'
 
 def mark(coord,symbol):
@@ -28,41 +29,60 @@ def mark(coord,symbol):
     y = coord[1]
     if symbol == 0:
         if x == "0":
-            line1[int(y)] = "0"
+            line1[int(y)] = "O"
         elif x == "1":
-            line2[int(y)] = "0"
+            line2[int(y)] = "O"
         elif x == '2':
-            line3[int(y)] = "0"
-        else:
-            print("wrong coordinate")
-    if symbol == 1:
+            line3[int(y)] = "O"
+    elif symbol == 1:
         if x == "0":
             line1[int(y)] = "X"
         elif x == "1":
             line2[int(y)] = "X"
         elif x == '2':
             line3[int(y)] = "X"
-        else:
-            print("wrong coordinate")
+    else:
+        print("missing something")
 
-def IAmove():
+def AIcoord():
     x = randint(0,2)
     y = randint(0,2)
-    print(x,1)
-    return str(x), str(y)
+    return (str(x), str(y))
 
+def isMarked(coord):
+    for i in xList:
+        if i == coord:
+            return True
+    for i in List0:
+        if i == coord:
+            return True
+    return False    
 
-showboard()
+def winner(round_list):
+    for i in round_list:
+        for j in round_list[i]:
+            
 
-asnwer = input("\nYou are the X, enter the coordinates: ")
-real_answer = translateCoord(asnwer)
-xList.append(real_answer)
-mark(real_answer, 1)
+#Running
+for round in range(6):
+    showboard()
 
-showboard()
+    answer = input("\nYou are the X, enter the coordinates: ")
+    user = translateCoord(answer)
+    if isMarked(user):
+        print('Try again')
+        continue
 
-print('AI MOVE\n')
-mark(IAmove(),0)
-showboard()
+    mark(user, 1)
+    xList.append(user)    
 
-#print(translateCoord(asnwer))
+    showboard()
+
+    print('\nAI MOVE\n')
+    while True:
+        AImove = AIcoord()
+        if isMarked(AImove):
+            continue
+        break
+    List0.append(AImove)
+    mark(AImove, 0)
